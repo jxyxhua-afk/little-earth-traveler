@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.vite/
+.env
+.env.*
+.DS_Store
+output/playwright/
+coverage/
+*.log
+.netlify/
+.playwright-cli/

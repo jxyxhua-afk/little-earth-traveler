@@ -1,0 +1,17 @@
+{
+  "name": "小小地球旅行家：从大河坎出发",
+  "short_name": "地球旅行家",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#e9faff",
+  "theme_color": "#65c7f2",
+  "icons": [
+    {
+      "src": "earth-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
