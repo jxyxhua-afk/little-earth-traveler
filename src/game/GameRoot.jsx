@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from "react";
 import { MVP_COUNTRIES } from "./data/countries.js";
+import { PhysicsLab } from "./physics-lab/PhysicsLab.jsx";
 import { CountryScreen } from "./screens/CountryScreen.jsx";
 import { GlobeScreen } from "./screens/GlobeScreen.jsx";
 import "./styles/game.css";
 
 export function GameRoot() {
+  const mode = new URLSearchParams(window.location.search).get("mode");
   const [screen, setScreen] = useState("globe");
   const [selectedCountryId, setSelectedCountryId] = useState(null);
   const [discoveredByCountry, setDiscoveredByCountry] = useState({});
@@ -38,6 +40,10 @@ export function GameRoot() {
         [countryId]: [...current, itemId]
       };
     });
+  }
+
+  if (mode === "physics-lab") {
+    return <PhysicsLab />;
   }
 
   if (screen === "country" && selectedCountry) {
