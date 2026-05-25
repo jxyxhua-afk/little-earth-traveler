@@ -4,6 +4,7 @@ import { InteractiveItem } from "./InteractiveItem.jsx";
 
 export function CountryDiorama({
   country,
+  displayItems,
   activeZone,
   activeZoneId,
   selectedItemId,
@@ -17,9 +18,9 @@ export function CountryDiorama({
   const activeIds = new Set(resolvedZone?.items || []);
   const isOverview = !resolvedZone;
   const clickItem = onItemClick || onItem;
-  const visibleItems = resolvedZone
+  const visibleItems = displayItems || (resolvedZone
     ? country.items.filter((item) => activeIds.has(item.id) || item.id === selectedItemId)
-    : country.items;
+    : country.items);
 
   return (
     <group rotation={[0, rotationY, 0]} onClick={() => onClearSelection?.()}>

@@ -8,6 +8,53 @@ import { CameraRig } from "../three/CameraRig.jsx";
 import { CountryDiorama } from "../three/CountryDiorama.jsx";
 import { useGameAudio } from "../hooks/useGameAudio.js";
 
+const ACTIVE_ZONE_SPREAD_OFFSETS = [
+  [0, 0, 0],
+  [0.82, 0, 0.18],
+  [-0.72, 0, 0.28],
+  [0.28, 0, -0.72],
+  [-0.35, 0, -0.68],
+  [1.08, 0, -0.34]
+];
+
+function clampScenePosition(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function buildDisplayItems(country, activeZone, selectedItemId) {
+  if (!activeZone) return country.items;
+
+  const itemById = new Map(country.items.map((item) => [item.id, item]));
+  const zoneItems = activeZone.items
+    .map((itemId) => itemById.get(itemId))
+    .filter(Boolean);
+
+  if (selectedItemId && !activeZone.items.includes(selectedItemId)) {
+    const selectedItem = itemById.get(selectedItemId);
+    if (selectedItem) zoneItems.push(selectedItem);
+  }
+
+  if (zoneItems.length < 2) return zoneItems;
+
+  return zoneItems.map((item, index) => {
+    const offset = ACTIVE_ZONE_SPREAD_OFFSETS[index] ?? [
+      Math.cos(index * 1.25) * 0.82,
+      0,
+      Math.sin(index * 1.25) * 0.68
+    ];
+    const [x, y, z] = item.position;
+
+    return {
+      ...item,
+      position: [
+        clampScenePosition(x + offset[0], -2.8, 2.8),
+        y + offset[1],
+        clampScenePosition(z + offset[2], -2.25, 2.25)
+      ]
+    };
+  });
+}
+
 export function CountryScreen({
   country,
   discoveredIds,
@@ -23,13 +70,17 @@ export function CountryScreen({
   const touchDistanceRef = useRef(null);
   const dragTouchRef = useRef(null);
 
-  const selectedItem = useMemo(() => {
-    return country.items.find((item) => item.id === selectedItemId) ?? null;
-  }, [country.items, selectedItemId]);
-
   const activeZone = useMemo(() => {
     return country.zones.find((zone) => zone.id === activeZoneId) ?? null;
   }, [country.zones, activeZoneId]);
+
+  const displayItems = useMemo(() => {
+    return buildDisplayItems(country, activeZone, selectedItemId);
+  }, [activeZone, country, selectedItemId]);
+
+  const selectedItem = useMemo(() => {
+    return displayItems.find((item) => item.id === selectedItemId) ?? null;
+  }, [displayItems, selectedItemId]);
 
   const {
     unlocked,
@@ -196,6 +247,7 @@ export function CountryScreen({
 
         <CountryDiorama
           country={country}
+          displayItems={displayItems}
           activeZoneId={activeZoneId}
           selectedItemId={selectedItemId}
           rotationY={sceneRotation}

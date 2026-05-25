@@ -386,13 +386,16 @@ button {
 }
 
 .country-mini-hint {
-  left: clamp(16px, 4vw, 52px);
-  bottom: clamp(18px, 5vh, 52px);
+  left: clamp(14px, 3vw, 36px);
+  top: clamp(78px, 12vh, 108px);
+  bottom: auto;
   width: auto;
-  max-width: min(320px, calc(100vw - 120px));
-  padding: 12px 16px;
-  border-radius: 24px;
+  max-width: min(250px, calc(100vw - 112px));
+  max-height: min(22vh, 118px);
+  padding: 10px 14px;
+  border-radius: 22px;
   transition: opacity 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
 }
 
 .game-shell.has-selected-item .country-mini-hint {
@@ -416,7 +419,9 @@ button {
 }
 
 .country-mini-hint h1 {
-  font-size: clamp(18px, 1.8vw, 24px);
+  margin: 6px 0 0;
+  font-size: clamp(16px, 1.55vw, 21px);
+  line-height: 1.08;
 }
 
 .country-mini-hint p,
@@ -485,12 +490,12 @@ button {
 }
 
 .item-info-card {
-  left: clamp(16px, 4vw, 52px);
+  left: clamp(14px, 3vw, 36px);
   bottom: clamp(18px, 5vh, 56px);
   transform: none;
-  width: clamp(190px, 20vw, 260px);
-  min-height: 190px;
-  padding: 18px;
+  width: clamp(168px, 17vw, 220px);
+  min-height: 168px;
+  padding: 15px;
   display: grid;
   justify-items: center;
   text-align: center;
@@ -501,14 +506,14 @@ button {
 }
 
 .item-card-symbol {
-  width: 82px;
-  height: 82px;
+  width: 68px;
+  height: 68px;
   display: grid;
   place-items: center;
-  border-radius: 26px;
+  border-radius: 22px;
   background: rgba(255, 255, 255, 0.82);
   box-shadow: 0 10px 20px rgba(46, 89, 112, 0.12);
-  font-size: 46px;
+  font-size: 40px;
 }
 
 .item-info-card .tiny-tag,
@@ -517,8 +522,8 @@ button {
 }
 
 .item-info-card h2 {
-  margin: 10px 0 4px;
-  font-size: clamp(19px, 2vw, 26px);
+  margin: 8px 0 2px;
+  font-size: clamp(17px, 1.7vw, 22px);
 }
 
 .card-actions {
@@ -549,18 +554,18 @@ button {
 }
 
 .item-info-card .secondary-small {
-  width: 72px;
-  height: 72px;
+  width: 58px;
+  height: 58px;
   display: grid;
   place-items: center;
-  margin-top: 12px;
+  margin-top: 8px;
   border-radius: 999px;
   font-size: 0;
 }
 
 .item-info-card .secondary-small::before {
   content: "♪";
-  font-size: 34px;
+  font-size: 29px;
   line-height: 1;
 }
 
@@ -755,12 +760,13 @@ button {
   }
 
   .country-mini-hint {
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
+    left: 12px;
+    right: auto;
+    top: 72px;
+    bottom: auto;
     width: auto;
-    max-width: none;
-    padding: 16px 18px;
+    max-width: min(230px, calc(100vw - 98px));
+    padding: 10px 12px;
   }
 
   .item-info-card {
@@ -768,7 +774,7 @@ button {
     right: auto;
     bottom: 16px;
     transform: none;
-    width: 190px;
+    width: 176px;
   }
 
   .zone-nav {
