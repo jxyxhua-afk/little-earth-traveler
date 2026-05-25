@@ -1,0 +1,157 @@
+.country-play-shell {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #cfeeff;
+  color: #21495a;
+  touch-action: none;
+}
+
+.country-play-shell * {
+  box-sizing: border-box;
+}
+
+.country-play-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.country-play-hud {
+  position: absolute;
+  z-index: 12;
+  top: max(14px, env(safe-area-inset-top));
+  left: max(14px, env(safe-area-inset-left));
+  right: max(14px, env(safe-area-inset-right));
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.country-back-button,
+.country-sound-button,
+.country-reset-button,
+.china-title-pill {
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 14px 34px rgba(46, 89, 112, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.country-back-button,
+.country-sound-button,
+.country-reset-button {
+  min-height: 56px;
+  border-radius: 22px;
+  color: #21495a;
+  font-weight: 900;
+  cursor: pointer;
+  touch-action: manipulation;
+  pointer-events: auto;
+}
+
+.country-back-button {
+  min-width: 104px;
+  padding: 0 18px;
+  font-size: 1.05rem;
+}
+
+.country-sound-button {
+  min-width: 56px;
+  font-size: 1.25rem;
+}
+
+.china-title-pill {
+  justify-self: center;
+  min-height: 64px;
+  max-width: min(520px, 52vw);
+  display: grid;
+  gap: 3px;
+  align-content: center;
+  border-radius: 26px;
+  padding: 10px 20px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.china-title-pill span {
+  color: #00a3bf;
+  font-size: clamp(1.08rem, 2.3vw, 1.45rem);
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.china-title-pill strong {
+  color: #5c7684;
+  font-size: clamp(0.88rem, 1.6vw, 1.05rem);
+  line-height: 1.25;
+  font-weight: 850;
+}
+
+.country-reset-button {
+  position: absolute;
+  z-index: 12;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  min-width: 98px;
+  color: #8c6a00;
+  background: rgba(255, 243, 166, 0.94);
+  font-size: 1.05rem;
+}
+
+@media (max-width: 720px) {
+  .country-play-hud {
+    grid-template-columns: auto auto;
+    grid-template-areas:
+      "back sound"
+      "title title";
+    align-items: center;
+  }
+
+  .country-back-button {
+    grid-area: back;
+    min-width: 92px;
+    min-height: 52px;
+    padding: 0 14px;
+    border-radius: 20px;
+    font-size: 0.98rem;
+  }
+
+  .country-sound-button {
+    grid-area: sound;
+    justify-self: end;
+    min-width: 52px;
+    min-height: 52px;
+    border-radius: 20px;
+  }
+
+  .china-title-pill {
+    grid-area: title;
+    justify-self: start;
+    max-width: min(520px, calc(100vw - 28px));
+    min-height: 58px;
+    border-radius: 22px;
+    padding: 9px 16px;
+    text-align: left;
+  }
+
+  .country-reset-button {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    min-width: 88px;
+    min-height: 52px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 430px) {
+  .china-title-pill strong {
+    display: none;
+  }
+}

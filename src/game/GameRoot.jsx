@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { ChinaGreatWallScene } from "./country-scenes/ChinaGreatWallScene.jsx";
 import { MVP_COUNTRIES } from "./data/countries.js";
 import { PhysicsLab } from "./physics-lab/PhysicsLab.jsx";
 import { CountryScreen } from "./screens/CountryScreen.jsx";
@@ -21,8 +22,17 @@ export function GameRoot() {
   }, [discoveredByCountry]);
 
   function enterCountry(countryId) {
-    setSelectedCountryId(countryId);
-    setScreen("country");
+    if (countryId === "china") {
+      setSelectedCountryId(countryId);
+      setScreen("china-great-wall");
+      return;
+    }
+
+    const country = MVP_COUNTRIES[countryId];
+    console.log("[CountryPreview] not-open-yet", {
+      id: countryId,
+      sceneId: country?.sceneId ?? countryId
+    });
   }
 
   function backToGlobe() {
@@ -44,6 +54,10 @@ export function GameRoot() {
 
   if (mode === "physics-lab") {
     return <PhysicsLab />;
+  }
+
+  if (screen === "china-great-wall") {
+    return <ChinaGreatWallScene onBack={backToGlobe} />;
   }
 
   if (screen === "country" && selectedCountry) {

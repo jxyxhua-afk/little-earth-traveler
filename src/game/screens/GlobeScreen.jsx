@@ -9,7 +9,7 @@ import { GameHud } from "../ui/GameHud.jsx";
 import { GameCanvas } from "../three/GameCanvas.jsx";
 import { HotspotLabel } from "../three/HotspotLabel.jsx";
 
-export function GlobeScreen({ countries, totalStars, totalStarsTotal }) {
+export function GlobeScreen({ countries, totalStars, totalStarsTotal, onEnterCountry }) {
   const audio = useGameAudio();
   const [selectedMarkerId, setSelectedMarkerId] = useState(null);
   const availableMarkers = useMemo(() => {
@@ -44,6 +44,10 @@ export function GlobeScreen({ countries, totalStars, totalStarsTotal }) {
       id: selectedCountryInfo.id,
       sceneId: selectedCountryInfo.sceneId
     });
+
+    if (selectedCountryInfo.id === "china") {
+      onEnterCountry?.(selectedCountryInfo.id);
+    }
   };
 
   return (
