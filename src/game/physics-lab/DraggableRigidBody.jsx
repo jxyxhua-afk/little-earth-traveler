@@ -16,11 +16,14 @@ function clampMagnitude(x, z, max) {
 
 export function DraggableRigidBody({
   id,
+  audioType = "generic",
   initialPosition,
   initialRotation = [0, 0, 0],
   resetToken,
   children,
   onDragChange,
+  onImpact,
+  onInteractionStart,
   tuning = PHYSICS_TUNING,
   ...rigidBodyProps
 }) {
@@ -89,6 +92,7 @@ export function DraggableRigidBody({
     const body = bodyRef.current;
     if (!body) return;
 
+    onInteractionStart?.();
     const position = body.translation();
     planeRef.current.set(dragPlaneNormal, -position.y);
     updateDragTarget(event);
@@ -121,6 +125,22 @@ export function DraggableRigidBody({
     } catch {
       // No-op; pointer capture is a convenience, not required for the lab.
     }
+  }
+
+  function handleCollisionEnter(payload) {
+    const body = bodyRef.current;
+    if (!body) return;
+
+    const velocity = body.linvel();
+    const otherVelocity = payload.other.rigidBody?.linvel?.() ?? { x: 0, y: 0, z: 0 };
+    const relativeSpeed = Math.hypot(
+      velocity.x - otherVelocity.x,
+      velocity.y - otherVelocity.y,
+      velocity.z - otherVelocity.z
+    );
+    const intensity = Math.min(1, relativeSpeed / 7);
+
+    onImpact?.(audioType, intensity, id);
   }
 
   useFrame(() => {
@@ -168,6 +188,7 @@ export function DraggableRigidBody({
       angularDamping={tuning.angularDamping}
       canSleep={false}
       ccd
+      onCollisionEnter={handleCollisionEnter}
       {...rigidBodyProps}
     >
       <group

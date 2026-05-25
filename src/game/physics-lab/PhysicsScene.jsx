@@ -5,7 +5,7 @@ import { Physics } from "@react-three/rapier";
 import * as THREE from "three";
 import { PhysicsObjects } from "./PhysicsObjects.jsx";
 
-export function PhysicsScene({ resetToken, onDragChange }) {
+export function PhysicsScene({ resetToken, onDragChange, onImpact, onInteractionStart }) {
   return (
     <Canvas
       className="physics-canvas"
@@ -43,7 +43,12 @@ export function PhysicsScene({ resetToken, onDragChange }) {
       <Suspense fallback={null}>
         <Environment preset="park" />
         <Physics gravity={[0, -9.81, 0]} colliders={false} timeStep="vary">
-          <PhysicsObjects resetToken={resetToken} onDragChange={onDragChange} />
+          <PhysicsObjects
+            resetToken={resetToken}
+            onDragChange={onDragChange}
+            onImpact={onImpact}
+            onInteractionStart={onInteractionStart}
+          />
         </Physics>
       </Suspense>
     </Canvas>
