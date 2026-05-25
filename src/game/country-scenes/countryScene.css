@@ -38,7 +38,6 @@
 .country-sound-button,
 .country-reset-button,
 .country-sort-button,
-.country-ramp-button,
 .china-title-pill {
   border: 2px solid rgba(255, 255, 255, 0.78);
   background: rgba(255, 255, 255, 0.84);
@@ -49,8 +48,7 @@
 .country-back-button,
 .country-sound-button,
 .country-reset-button,
-.country-sort-button,
-.country-ramp-button {
+.country-sort-button {
   min-height: 56px;
   border-radius: 22px;
   color: #21495a;
@@ -112,8 +110,7 @@
 }
 
 .country-reset-button,
-.country-sort-button,
-.country-ramp-button {
+.country-sort-button {
   min-width: 98px;
   color: #8c6a00;
   font-size: 1.05rem;
@@ -127,12 +124,6 @@
   min-width: 118px;
   color: #047a65;
   background: rgba(213, 250, 226, 0.94);
-}
-
-.country-ramp-button {
-  min-width: 118px;
-  color: #24598b;
-  background: rgba(221, 240, 255, 0.94);
 }
 
 .country-sort-button:disabled {
@@ -205,15 +196,13 @@
   }
 
   .country-reset-button,
-  .country-sort-button,
-  .country-ramp-button {
+  .country-sort-button {
     min-width: 88px;
     min-height: 52px;
     border-radius: 20px;
   }
 
-  .country-sort-button,
-  .country-ramp-button {
+  .country-sort-button {
     min-width: 108px;
   }
 
@@ -237,8 +226,7 @@
     justify-content: flex-end;
   }
 
-  .country-sort-button,
-  .country-ramp-button {
+  .country-sort-button {
     flex: 1;
     max-width: 176px;
   }

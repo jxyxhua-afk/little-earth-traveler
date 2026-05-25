@@ -17,6 +17,15 @@ function clampMagnitude(x, z, max) {
   return { x: x * scale, z: z * scale };
 }
 
+function clampToDragBounds(target, bounds) {
+  if (!bounds) return;
+
+  if (Number.isFinite(bounds.minX)) target.x = Math.max(bounds.minX, target.x);
+  if (Number.isFinite(bounds.maxX)) target.x = Math.min(bounds.maxX, target.x);
+  if (Number.isFinite(bounds.minZ)) target.z = Math.max(bounds.minZ, target.z);
+  if (Number.isFinite(bounds.maxZ)) target.z = Math.min(bounds.maxZ, target.z);
+}
+
 export function DraggableRigidBody({
   id,
   audioType = "generic",
@@ -28,10 +37,14 @@ export function DraggableRigidBody({
   onImpact,
   onInteractionStart,
   onSortComplete,
+  onTap,
   sortToken = 0,
   sortDuration = 1.8,
   sortLift = 0.32,
   dragLift = PHYSICS_TUNING.dragLift,
+  dragBounds = null,
+  tapMoveThreshold = 14,
+  tapMaxDuration = 320,
   tuning = PHYSICS_TUNING,
   ...rigidBodyProps
 }) {
@@ -45,6 +58,9 @@ export function DraggableRigidBody({
   const sortStartTimeRef = useRef(0);
   const sortStartPositionRef = useRef(new THREE.Vector3(...initialPosition));
   const sortStartQuaternionRef = useRef(new THREE.Quaternion());
+  const tapStartRef = useRef(null);
+  const tapMovedRef = useRef(false);
+  const lastTapCandidateRef = useRef(null);
   const targetPosition = useMemo(() => new THREE.Vector3(...initialPosition), [initialPosition]);
 
   const initialQuaternion = useMemo(() => {
@@ -68,7 +84,8 @@ export function DraggableRigidBody({
     body.setAngularDamping(tuning.angularDamping);
     body.wakeUp();
     targetRef.current.set(...initialPosition);
-  }, [initialPosition, initialQuaternion, tuning.angularDamping, tuning.linearDamping]);
+    clampToDragBounds(targetRef.current, dragBounds);
+  }, [dragBounds, initialPosition, initialQuaternion, tuning.angularDamping, tuning.linearDamping]);
 
   useEffect(() => {
     resetBody();
@@ -110,6 +127,7 @@ export function DraggableRigidBody({
         dragTargetYRef.current,
         scratchPoint.z
       );
+      clampToDragBounds(targetRef.current, dragBounds);
     }
   }
 
@@ -144,6 +162,13 @@ export function DraggableRigidBody({
     const body = bodyRef.current;
     if (!body) return;
 
+    tapStartRef.current = {
+      x: event.clientX ?? 0,
+      y: event.clientY ?? 0,
+      time: performance.now()
+    };
+    tapMovedRef.current = false;
+
     onInteractionStart?.();
     const position = body.translation();
     const movementPlaneY = Math.min(position.y, tuning.dragPlaneY);
@@ -155,6 +180,7 @@ export function DraggableRigidBody({
     planeRef.current.set(dragPlaneNormal, -movementPlaneY);
     dragTargetYRef.current = liftedY;
     targetRef.current.set(position.x, liftedY, position.z);
+    clampToDragBounds(targetRef.current, dragBounds);
     draggingRef.current = true;
     body.setLinearDamping(tuning.dragLinearDamping);
     body.setAngularDamping(tuning.dragAngularDamping);
@@ -171,13 +197,39 @@ export function DraggableRigidBody({
   function handlePointerMove(event) {
     if (!draggingRef.current || sortingRef.current) return;
     event.stopPropagation();
+
+    if (tapStartRef.current) {
+      const dx = (event.clientX ?? 0) - tapStartRef.current.x;
+      const dy = (event.clientY ?? 0) - tapStartRef.current.y;
+      if (Math.hypot(dx, dy) > tapMoveThreshold) {
+        tapMovedRef.current = true;
+      }
+    }
+
     updateDragTarget(event);
   }
 
   function handlePointerUp(event) {
-    if (!draggingRef.current) return;
+    const wasDragging = draggingRef.current;
+    if (!wasDragging && !tapStartRef.current) return;
     event.stopPropagation();
-    finishDrag();
+
+    if (tapStartRef.current) {
+      const dx = (event.clientX ?? 0) - tapStartRef.current.x;
+      const dy = (event.clientY ?? 0) - tapStartRef.current.y;
+      const duration = performance.now() - tapStartRef.current.time;
+      lastTapCandidateRef.current = {
+        moved: tapMovedRef.current || Math.hypot(dx, dy) > tapMoveThreshold,
+        duration,
+        time: performance.now()
+      };
+    }
+
+    tapStartRef.current = null;
+    tapMovedRef.current = false;
+    if (wasDragging) {
+      finishDrag();
+    }
 
     try {
       event.target.releasePointerCapture(event.pointerId);
@@ -200,6 +252,25 @@ export function DraggableRigidBody({
     const intensity = Math.min(1, relativeSpeed / 7);
 
     onImpact?.(audioType, intensity, id);
+  }
+
+  function handleClick(event) {
+    if (!onTap) return;
+
+    const movement = Number.isFinite(event.delta) ? event.delta : 0;
+    if (movement > tapMoveThreshold) return;
+
+    const tapCandidate = lastTapCandidateRef.current;
+    if (
+      tapCandidate &&
+      performance.now() - tapCandidate.time < 450 &&
+      (tapCandidate.moved || tapCandidate.duration > tapMaxDuration)
+    ) {
+      return;
+    }
+
+    event.stopPropagation();
+    onTap(event);
   }
 
   useFrame(() => {
@@ -308,6 +379,7 @@ export function DraggableRigidBody({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onClick={handleClick}
       >
         {children}
       </group>

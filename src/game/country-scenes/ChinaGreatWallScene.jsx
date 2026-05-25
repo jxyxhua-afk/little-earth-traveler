@@ -202,6 +202,7 @@ export function ChinaGreatWallScene({ onBack }) {
               rampFolded={rampFolded}
               onImpact={handleImpact}
               onInteractionStart={ensureAudioStarted}
+              onToggleRampFold={handleToggleRampFold}
               onSortComplete={handleSortComplete}
             />
           </Physics>
@@ -234,9 +235,6 @@ export function ChinaGreatWallScene({ onBack }) {
           disabled={isSorting}
         >
           {isSorting ? "整理中..." : "🧹 整理"}
-        </button>
-        <button className="country-ramp-button" onClick={handleToggleRampFold}>
-          {rampFolded ? "展开斜坡" : "折叠斜坡"}
         </button>
         <button className="country-reset-button" onClick={handleReset}>
           重置

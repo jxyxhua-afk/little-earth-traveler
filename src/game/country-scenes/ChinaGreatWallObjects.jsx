@@ -44,6 +44,19 @@ const RAMP_POSES = {
   }
 };
 
+const RAMP_DRAG_BOUNDS = {
+  minX: -3.85,
+  maxX: 3.85,
+  minZ: -2.75,
+  maxZ: 2.55
+};
+
+const CHINA_BALL_TUNING = {
+  ...PHYSICS_TUNING,
+  linearDamping: 0.24,
+  angularDamping: 0.22
+};
+
 export const CHINA_SORTABLE_COUNT = WALL_BLOCKS.length + 3;
 
 function ToyMaterial({ color, roughness = 0.72, metalness = 0.02, opacity = 1 }) {
@@ -134,7 +147,7 @@ function Rails() {
   ));
 }
 
-function Ramp({ resetToken, folded, onImpact, onInteractionStart }) {
+function Ramp({ resetToken, folded, onImpact, onInteractionStart, onToggleFold }) {
   const pose = folded ? RAMP_POSES.folded : RAMP_POSES.open;
 
   return (
@@ -148,7 +161,11 @@ function Ramp({ resetToken, folded, onImpact, onInteractionStart }) {
       friction={0.58}
       restitution={0.05}
       dragLift={0.22}
+      dragBounds={RAMP_DRAG_BOUNDS}
+      tapMoveThreshold={16}
+      tapMaxDuration={360}
       lockRotations
+      onTap={onToggleFold}
       onImpact={onImpact}
       onInteractionStart={onInteractionStart}
     >
@@ -165,6 +182,16 @@ function Ramp({ resetToken, folded, onImpact, onInteractionStart }) {
         <mesh castShadow receiveShadow position={[0, 0.005, 0.52]} rotation={[0, 0, Math.PI]}>
           <coneGeometry args={[0.34, 0.045, 3]} />
           <ToyMaterial color="#f49b63" roughness={0.7} />
+        </mesh>
+      </group>
+      <group position={[1.2, 0.2, 0.56]}>
+        <mesh castShadow receiveShadow>
+          <sphereGeometry args={[0.12, 20, 14]} />
+          <ToyMaterial color="#fff3a6" roughness={0.38} />
+        </mesh>
+        <mesh castShadow receiveShadow position={[0.16, 0.01, 0]} rotation={[0, 0, -Math.PI / 2]}>
+          <coneGeometry args={[0.1, 0.18, 18]} />
+          <ToyMaterial color="#f49b63" roughness={0.5} />
         </mesh>
       </group>
       <ThinBox position={[0, 0.14, -0.83]} size={[3.0, 0.04, 0.12]} color="#ffeeb2" />
@@ -301,6 +328,7 @@ function Ball({ resetToken, sortToken, onImpact, onInteractionStart, onSortCompl
       restitution={PHYSICS_TUNING.ballRestitution}
       sortToken={sortToken}
       dragLift={1.08}
+      tuning={CHINA_BALL_TUNING}
       onImpact={onImpact}
       onInteractionStart={onInteractionStart}
       onSortComplete={onSortComplete}
@@ -458,6 +486,7 @@ export function ChinaGreatWallObjects({
   rampFolded,
   onImpact,
   onInteractionStart,
+  onToggleRampFold,
   onSortComplete
 }) {
   return (
@@ -469,6 +498,7 @@ export function ChinaGreatWallObjects({
         folded={rampFolded}
         onImpact={onImpact}
         onInteractionStart={onInteractionStart}
+        onToggleFold={onToggleRampFold}
       />
       <GreatWallBlocks
         resetToken={resetToken}
