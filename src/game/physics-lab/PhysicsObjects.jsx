@@ -65,7 +65,12 @@ function Rails() {
   ];
 
   return rails.map((rail) => (
-    <RigidBody key={rail.position.join(":")} type="fixed" friction={0.35} restitution={0.62}>
+    <RigidBody
+      key={rail.position.join(":")}
+      type="fixed"
+      friction={PHYSICS_TUNING.railFriction}
+      restitution={PHYSICS_TUNING.railRestitution}
+    >
       <mesh castShadow receiveShadow position={rail.position}>
         <boxGeometry args={rail.size} />
         <ToyMaterial color={railColor} />
@@ -79,8 +84,8 @@ function Rails() {
       <CuboidCollider
         args={[rail.size[0] / 2, rail.size[1] / 2, rail.size[2] / 2]}
         position={rail.position}
-        friction={0.35}
-        restitution={0.62}
+        friction={PHYSICS_TUNING.railFriction}
+        restitution={PHYSICS_TUNING.railRestitution}
       />
     </RigidBody>
   ));
@@ -352,6 +357,7 @@ function BoxPile({ resetToken, onImpact, onInteractionStart }) {
         args={[0.34, 0.34, 0.34]}
         mass={1.15}
         friction={PHYSICS_TUNING.boxFriction}
+        restitution={PHYSICS_TUNING.boxRestitution}
       />
       <ToyBlock color={box.color} sticker={stickers[index % stickers.length]} />
     </DraggableRigidBody>

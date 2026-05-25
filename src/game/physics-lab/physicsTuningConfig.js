@@ -5,7 +5,10 @@ export const PHYSICS_TUNING = {
   truckMass: 6,
   ballRestitution: 0.75,
   boxFriction: 0.8,
+  boxRestitution: 0.32,
   groundFriction: 0.7,
+  railFriction: 0.28,
+  railRestitution: 0.78,
   linearDamping: 0.4,
   angularDamping: 0.5,
   dragLift: 0.85,
@@ -14,9 +17,9 @@ export const PHYSICS_TUNING = {
   maxDragVerticalSpeed: 8,
   dragLinearDamping: 1.6,
   dragAngularDamping: 1.8,
-  boundaryLimitX: 6.45,
-  boundaryLimitZ: 4.75,
-  boundaryLimitY: 5.8
+  boundaryLimitX: 8.4,
+  boundaryLimitZ: 6.4,
+  boundaryLimitY: 7.2
 };
 
 export const DYNAMIC_OBJECTS = {
