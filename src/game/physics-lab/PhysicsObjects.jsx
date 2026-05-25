@@ -65,7 +65,7 @@ function Rails() {
   ];
 
   return rails.map((rail) => (
-    <RigidBody key={rail.position.join(":")} type="fixed" friction={0.8} restitution={0.2}>
+    <RigidBody key={rail.position.join(":")} type="fixed" friction={0.35} restitution={0.62}>
       <mesh castShadow receiveShadow position={rail.position}>
         <boxGeometry args={rail.size} />
         <ToyMaterial color={railColor} />
@@ -79,6 +79,8 @@ function Rails() {
       <CuboidCollider
         args={[rail.size[0] / 2, rail.size[1] / 2, rail.size[2] / 2]}
         position={rail.position}
+        friction={0.35}
+        restitution={0.62}
       />
     </RigidBody>
   ));
@@ -226,6 +228,7 @@ function SmallCar({ resetToken, onDragChange, onImpact, onInteractionStart }) {
       onDragChange={onDragChange}
       onImpact={onImpact}
       onInteractionStart={onInteractionStart}
+      dragLift={0.18}
     >
       <CuboidCollider args={[0.64, 0.28, 0.36]} mass={object.mass} />
       <ThinBox position={[0, 0.02, 0]} size={[1.24, 0.34, 0.68]} color="#ff7d66" />
@@ -264,6 +267,7 @@ function Truck({ resetToken, onDragChange, onImpact, onInteractionStart }) {
       onDragChange={onDragChange}
       onImpact={onImpact}
       onInteractionStart={onInteractionStart}
+      dragLift={0.18}
     >
       <CuboidCollider args={[0.95, 0.38, 0.48]} mass={object.mass} />
       <ThinBox position={[0.28, 0.02, 0]} size={[1.35, 0.64, 0.92]} color="#4f74c9" />

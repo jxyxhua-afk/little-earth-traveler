@@ -33,6 +33,19 @@ const WALL_BLOCKS = [
   { id: "great-wall-block-6", position: [1.55, 0.27, 0.15], color: "#ffd166", sticker: "arch" }
 ];
 
+const RAMP_POSES = {
+  open: {
+    position: [2.45, 0.72, -2.2],
+    rotation: [-0.36, 0, 0]
+  },
+  folded: {
+    position: [2.45, 0.2, -2.2],
+    rotation: [0, 0, 0]
+  }
+};
+
+export const CHINA_SORTABLE_COUNT = WALL_BLOCKS.length + 3;
+
 function ToyMaterial({ color, roughness = 0.72, metalness = 0.02, opacity = 1 }) {
   return (
     <meshStandardMaterial
@@ -95,7 +108,7 @@ function Rails() {
   ];
 
   return rails.map((rail) => (
-    <RigidBody key={rail.position.join(":")} type="fixed" friction={0.8} restitution={0.2}>
+    <RigidBody key={rail.position.join(":")} type="fixed" friction={0.35} restitution={0.62}>
       <mesh castShadow receiveShadow position={rail.position}>
         <boxGeometry args={rail.size} />
         <ToyMaterial color={railColor} />
@@ -109,20 +122,32 @@ function Rails() {
       <CuboidCollider
         args={[rail.size[0] / 2, rail.size[1] / 2, rail.size[2] / 2]}
         position={rail.position}
+        friction={0.35}
+        restitution={0.62}
       />
     </RigidBody>
   ));
 }
 
-function Ramp() {
+function Ramp({ resetToken, folded, onImpact, onInteractionStart }) {
+  const pose = folded ? RAMP_POSES.folded : RAMP_POSES.open;
+
   return (
-    <RigidBody
-      type="fixed"
+    <DraggableRigidBody
+      id="china-ramp-board"
+      audioType="box"
+      initialPosition={pose.position}
+      initialRotation={pose.rotation}
+      resetToken={resetToken}
+      colliders={false}
       friction={0.58}
       restitution={0.05}
-      position={[2.45, 0.72, -2.2]}
-      rotation={[-0.36, 0, 0]}
+      dragLift={0.22}
+      lockRotations
+      onImpact={onImpact}
+      onInteractionStart={onInteractionStart}
     >
+      <CuboidCollider args={[1.53, 0.11, 0.88]} mass={4.5} friction={0.58} restitution={0.05} />
       <mesh castShadow receiveShadow>
         <boxGeometry args={[3.05, 0.22, 1.75]} />
         <ToyMaterial color="#ffe083" />
@@ -139,8 +164,7 @@ function Ramp() {
       </group>
       <ThinBox position={[0, 0.14, -0.83]} size={[3.0, 0.04, 0.12]} color="#ffeeb2" />
       <ThinBox position={[0, 0.14, 0.83]} size={[3.0, 0.04, 0.12]} color="#f4c66d" />
-      <CuboidCollider args={[1.53, 0.11, 0.88]} />
-    </RigidBody>
+    </DraggableRigidBody>
   );
 }
 
@@ -174,7 +198,7 @@ function LightDot({ position, color, radius = 0.055 }) {
   );
 }
 
-function SmallCar({ resetToken, onImpact, onInteractionStart }) {
+function SmallCar({ resetToken, sortToken, onImpact, onInteractionStart, onSortComplete }) {
   const object = CHINA_TOYS.car;
 
   return (
@@ -187,8 +211,11 @@ function SmallCar({ resetToken, onImpact, onInteractionStart }) {
       colliders={false}
       friction={0.52}
       restitution={0.12}
+      sortToken={sortToken}
+      dragLift={0.18}
       onImpact={onImpact}
       onInteractionStart={onInteractionStart}
+      onSortComplete={onSortComplete}
     >
       <CuboidCollider args={[0.64, 0.28, 0.36]} mass={object.mass} />
       <ThinBox position={[0, 0.02, 0]} size={[1.24, 0.34, 0.68]} color="#ff7d66" />
@@ -211,7 +238,7 @@ function SmallCar({ resetToken, onImpact, onInteractionStart }) {
   );
 }
 
-function Truck({ resetToken, onImpact, onInteractionStart }) {
+function Truck({ resetToken, sortToken, onImpact, onInteractionStart, onSortComplete }) {
   const object = CHINA_TOYS.truck;
 
   return (
@@ -224,8 +251,11 @@ function Truck({ resetToken, onImpact, onInteractionStart }) {
       colliders={false}
       friction={0.62}
       restitution={0.08}
+      sortToken={sortToken}
+      dragLift={0.18}
       onImpact={onImpact}
       onInteractionStart={onInteractionStart}
+      onSortComplete={onSortComplete}
     >
       <CuboidCollider args={[0.95, 0.38, 0.48]} mass={object.mass} />
       <ThinBox position={[0.28, 0.02, 0]} size={[1.35, 0.64, 0.92]} color="#4f74c9" />
@@ -251,7 +281,7 @@ function Truck({ resetToken, onImpact, onInteractionStart }) {
   );
 }
 
-function Ball({ resetToken, onImpact, onInteractionStart }) {
+function Ball({ resetToken, sortToken, onImpact, onInteractionStart, onSortComplete }) {
   const object = CHINA_TOYS.ball;
 
   return (
@@ -264,8 +294,11 @@ function Ball({ resetToken, onImpact, onInteractionStart }) {
       colliders={false}
       friction={0.38}
       restitution={PHYSICS_TUNING.ballRestitution}
+      sortToken={sortToken}
+      dragLift={1.08}
       onImpact={onImpact}
       onInteractionStart={onInteractionStart}
+      onSortComplete={onSortComplete}
     >
       <BallCollider args={[0.34]} mass={object.mass} restitution={PHYSICS_TUNING.ballRestitution} />
       <mesh castShadow receiveShadow>
@@ -351,7 +384,7 @@ function GreatWallToyBlock({ color, sticker }) {
   );
 }
 
-function WallBlock({ block, resetToken, onImpact, onInteractionStart }) {
+function WallBlock({ block, resetToken, sortToken, onImpact, onInteractionStart, onSortComplete }) {
   return (
     <DraggableRigidBody
       id={block.id}
@@ -362,8 +395,10 @@ function WallBlock({ block, resetToken, onImpact, onInteractionStart }) {
       colliders={false}
       friction={PHYSICS_TUNING.boxFriction}
       restitution={0.05}
+      sortToken={sortToken}
       onImpact={onImpact}
       onInteractionStart={onInteractionStart}
+      onSortComplete={onSortComplete}
     >
       <CuboidCollider
         args={[0.28, 0.24, 0.17]}
@@ -391,7 +426,7 @@ function WatchTower({ x }) {
   );
 }
 
-function GreatWallBlocks({ resetToken, onImpact, onInteractionStart }) {
+function GreatWallBlocks({ resetToken, sortToken, onImpact, onInteractionStart, onSortComplete }) {
   return (
     <>
       <WatchTower x={-2.35} />
@@ -401,39 +436,61 @@ function GreatWallBlocks({ resetToken, onImpact, onInteractionStart }) {
           key={block.id}
           block={block}
           resetToken={resetToken}
+          sortToken={sortToken}
           onImpact={onImpact}
           onInteractionStart={onInteractionStart}
+          onSortComplete={onSortComplete}
         />
       ))}
     </>
   );
 }
 
-export function ChinaGreatWallObjects({ resetToken, onImpact, onInteractionStart }) {
+export function ChinaGreatWallObjects({
+  resetToken,
+  sortToken,
+  rampFolded,
+  onImpact,
+  onInteractionStart,
+  onSortComplete
+}) {
   return (
     <>
       <Ground />
       <Rails />
-      <Ramp />
-      <GreatWallBlocks
+      <Ramp
         resetToken={resetToken}
+        folded={rampFolded}
         onImpact={onImpact}
         onInteractionStart={onInteractionStart}
+      />
+      <GreatWallBlocks
+        resetToken={resetToken}
+        sortToken={sortToken}
+        onImpact={onImpact}
+        onInteractionStart={onInteractionStart}
+        onSortComplete={onSortComplete}
       />
       <SmallCar
         resetToken={resetToken}
+        sortToken={sortToken}
         onImpact={onImpact}
         onInteractionStart={onInteractionStart}
+        onSortComplete={onSortComplete}
       />
       <Truck
         resetToken={resetToken}
+        sortToken={sortToken}
         onImpact={onImpact}
         onInteractionStart={onInteractionStart}
+        onSortComplete={onSortComplete}
       />
       <Ball
         resetToken={resetToken}
+        sortToken={sortToken}
         onImpact={onImpact}
         onInteractionStart={onInteractionStart}
+        onSortComplete={onSortComplete}
       />
     </>
   );

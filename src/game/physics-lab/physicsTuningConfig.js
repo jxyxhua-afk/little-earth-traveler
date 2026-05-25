@@ -8,11 +8,15 @@ export const PHYSICS_TUNING = {
   groundFriction: 0.7,
   linearDamping: 0.4,
   angularDamping: 0.5,
+  dragLift: 0.85,
+  dragPlaneY: 0.45,
+  dragMaxLiftY: 1.65,
+  maxDragVerticalSpeed: 8,
   dragLinearDamping: 1.6,
   dragAngularDamping: 1.8,
-  boundaryLimitX: 5.2,
-  boundaryLimitZ: 3.9,
-  boundaryLimitY: 4.4
+  boundaryLimitX: 6.45,
+  boundaryLimitZ: 4.75,
+  boundaryLimitY: 5.8
 };
 
 export const DYNAMIC_OBJECTS = {

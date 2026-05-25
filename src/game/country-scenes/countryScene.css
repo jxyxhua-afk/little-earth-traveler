@@ -37,6 +37,8 @@
 .country-back-button,
 .country-sound-button,
 .country-reset-button,
+.country-sort-button,
+.country-ramp-button,
 .china-title-pill {
   border: 2px solid rgba(255, 255, 255, 0.78);
   background: rgba(255, 255, 255, 0.84);
@@ -46,7 +48,9 @@
 
 .country-back-button,
 .country-sound-button,
-.country-reset-button {
+.country-reset-button,
+.country-sort-button,
+.country-ramp-button {
   min-height: 56px;
   border-radius: 22px;
   color: #21495a;
@@ -94,15 +98,68 @@
   font-weight: 850;
 }
 
-.country-reset-button {
+.country-action-stack {
   position: absolute;
   z-index: 12;
   right: max(16px, env(safe-area-inset-right));
   bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  max-width: min(520px, calc(100vw - 32px));
+}
+
+.country-reset-button,
+.country-sort-button,
+.country-ramp-button {
   min-width: 98px;
   color: #8c6a00;
-  background: rgba(255, 243, 166, 0.94);
   font-size: 1.05rem;
+}
+
+.country-reset-button {
+  background: rgba(255, 243, 166, 0.94);
+}
+
+.country-sort-button {
+  min-width: 118px;
+  color: #047a65;
+  background: rgba(213, 250, 226, 0.94);
+}
+
+.country-ramp-button {
+  min-width: 118px;
+  color: #24598b;
+  background: rgba(221, 240, 255, 0.94);
+}
+
+.country-sort-button:disabled {
+  color: #6a8990;
+  cursor: default;
+  opacity: 0.88;
+}
+
+.country-stamp-toast {
+  position: absolute;
+  z-index: 14;
+  left: 50%;
+  bottom: max(94px, calc(env(safe-area-inset-bottom) + 88px));
+  transform: translateX(-50%);
+  min-height: 54px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.86);
+  border-radius: 24px;
+  padding: 12px 22px;
+  background: rgba(255, 246, 184, 0.94);
+  box-shadow: 0 18px 38px rgba(46, 89, 112, 0.16);
+  color: #8c6a00;
+  font-size: clamp(1rem, 2vw, 1.24rem);
+  font-weight: 950;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
 }
 
 @media (max-width: 720px) {
@@ -141,17 +198,48 @@
     text-align: left;
   }
 
-  .country-reset-button {
+  .country-action-stack {
     right: max(14px, env(safe-area-inset-right));
     bottom: max(14px, env(safe-area-inset-bottom));
+    gap: 8px;
+  }
+
+  .country-reset-button,
+  .country-sort-button,
+  .country-ramp-button {
     min-width: 88px;
     min-height: 52px;
     border-radius: 20px;
+  }
+
+  .country-sort-button,
+  .country-ramp-button {
+    min-width: 108px;
+  }
+
+  .country-stamp-toast {
+    bottom: max(82px, calc(env(safe-area-inset-bottom) + 78px));
+    max-width: calc(100vw - 32px);
+    min-height: 50px;
+    border-radius: 22px;
+    padding: 10px 18px;
   }
 }
 
 @media (max-width: 430px) {
   .china-title-pill strong {
     display: none;
+  }
+
+  .country-action-stack {
+    left: max(14px, env(safe-area-inset-left));
+    right: max(14px, env(safe-area-inset-right));
+    justify-content: flex-end;
+  }
+
+  .country-sort-button,
+  .country-ramp-button {
+    flex: 1;
+    max-width: 176px;
   }
 }
