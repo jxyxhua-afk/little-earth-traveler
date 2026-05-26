@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { ChinaGreatWallScene } from "./country-scenes/ChinaGreatWallScene.jsx";
 import { EgyptPyramidScene } from "./country-scenes/EgyptPyramidScene.jsx";
+import { UsaSchoolBusScene } from "./country-scenes/UsaSchoolBusScene.jsx";
 import { MVP_COUNTRIES } from "./data/countries.js";
 import { PhysicsLab } from "./physics-lab/PhysicsLab.jsx";
 import { CountryScreen } from "./screens/CountryScreen.jsx";
@@ -32,6 +33,12 @@ export function GameRoot() {
     if (countryId === "egypt") {
       setSelectedCountryId(countryId);
       setScreen("egypt-pyramid");
+      return;
+    }
+
+    if (countryId === "usa") {
+      setSelectedCountryId(countryId);
+      setScreen("usa-school-bus");
       return;
     }
 
@@ -69,6 +76,10 @@ export function GameRoot() {
 
   if (screen === "egypt-pyramid") {
     return <EgyptPyramidScene onBack={backToGlobe} />;
+  }
+
+  if (screen === "usa-school-bus") {
+    return <UsaSchoolBusScene onBack={backToGlobe} />;
   }
 
   if (screen === "country" && selectedCountry) {

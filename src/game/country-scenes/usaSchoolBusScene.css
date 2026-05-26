@@ -1,0 +1,542 @@
+.usa-game-shell {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 16%, rgba(255, 243, 166, 0.9) 0 42px, transparent 44px),
+    linear-gradient(180deg, #bfe9ff 0%, #dff7ff 52%, #c9f0d4 100%);
+  color: #21495a;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  touch-action: none;
+  user-select: none;
+}
+
+.usa-game-shell * {
+  box-sizing: border-box;
+}
+
+.usa-game-hud {
+  position: absolute;
+  z-index: 12;
+  top: max(14px, env(safe-area-inset-top));
+  left: max(14px, env(safe-area-inset-left));
+  right: max(14px, env(safe-area-inset-right));
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.usa-back-button,
+.usa-title-card,
+.usa-scoreboard,
+.usa-feedback-card,
+.usa-action-bar button {
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 14px 34px rgba(46, 89, 112, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.usa-back-button {
+  min-width: 104px;
+  min-height: 56px;
+  border-radius: 22px;
+  padding: 0 18px;
+  color: #21495a;
+  font-size: 1.05rem;
+  font-weight: 900;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.usa-title-card {
+  justify-self: center;
+  min-height: 64px;
+  max-width: min(620px, 58vw);
+  display: grid;
+  gap: 3px;
+  align-content: center;
+  border-radius: 26px;
+  padding: 10px 20px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.usa-title-card span {
+  color: #0877c9;
+  font-size: clamp(1.08rem, 2.3vw, 1.45rem);
+  line-height: 1.05;
+  font-weight: 950;
+}
+
+.usa-title-card strong {
+  color: #5c7684;
+  font-size: clamp(0.82rem, 1.4vw, 1rem);
+  line-height: 1.25;
+  font-weight: 850;
+}
+
+.usa-scoreboard {
+  position: absolute;
+  z-index: 12;
+  top: max(92px, calc(env(safe-area-inset-top) + 82px));
+  right: max(16px, env(safe-area-inset-right));
+  display: flex;
+  gap: 10px;
+  min-height: 52px;
+  border-radius: 22px;
+  padding: 8px 12px;
+}
+
+.usa-scoreboard div {
+  min-width: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 16px;
+  background: rgba(255, 243, 166, 0.82);
+  color: #8c6a00;
+  font-weight: 950;
+}
+
+.usa-road-stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 130px 28px 120px;
+  touch-action: none;
+}
+
+.usa-road {
+  position: relative;
+  width: min(1120px, 92vw);
+  height: min(560px, 62vh);
+  min-height: 360px;
+  border: 8px solid rgba(255, 255, 255, 0.72);
+  border-radius: 34px;
+  background:
+    linear-gradient(90deg, transparent 0 49%, rgba(255, 255, 255, 0.5) 49% 51%, transparent 51% 100%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.68) 0 52px, transparent 52px 108px),
+    linear-gradient(180deg, #7cc8e8 0 17%, #6ab7dd 17% 19%, #5d6774 19% 83%, #4f5965 83% 100%);
+  box-shadow: 0 22px 58px rgba(48, 92, 120, 0.22);
+  overflow: hidden;
+}
+
+.usa-road::before,
+.usa-road::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0 34px, transparent 34px 70px);
+  pointer-events: none;
+}
+
+.usa-road::before {
+  top: 40%;
+}
+
+.usa-road::after {
+  top: 60%;
+}
+
+.usa-skyline {
+  position: absolute;
+  z-index: 2;
+  left: 8vw;
+  right: 8vw;
+  top: 15vh;
+  height: 90px;
+  pointer-events: none;
+}
+
+.usa-liberty {
+  position: absolute;
+  left: 5%;
+  bottom: -42px;
+  width: 34px;
+  height: 86px;
+  border-radius: 16px 16px 5px 5px;
+  background: #8ed6c1;
+  box-shadow: inset 0 -10px 0 rgba(48, 135, 116, 0.24);
+}
+
+.usa-liberty::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: -22px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #a8ead6;
+}
+
+.usa-liberty::after {
+  content: "✦";
+  position: absolute;
+  right: -24px;
+  top: -38px;
+  color: #ffd166;
+  font-size: 30px;
+  transform: rotate(-18deg);
+}
+
+.usa-burger-shop {
+  position: absolute;
+  right: 12%;
+  bottom: -48px;
+  width: 110px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border: 4px solid #fff2b8;
+  border-radius: 18px 18px 8px 8px;
+  background: #ff9f6e;
+  box-shadow: 0 12px 20px rgba(104, 83, 46, 0.12);
+  font-size: 34px;
+}
+
+.usa-lane-tap {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: calc(var(--lane-y) - 10%);
+  height: 20%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.usa-lane-tap.active {
+  background: linear-gradient(90deg, transparent, rgba(255, 243, 166, 0.16), transparent);
+}
+
+.usa-shot-zone {
+  position: absolute;
+  z-index: 1;
+  left: 44%;
+  top: 19%;
+  width: 20%;
+  height: 64%;
+  display: grid;
+  place-items: end center;
+  border-left: 4px dashed rgba(255, 243, 166, 0.86);
+  border-right: 4px dashed rgba(255, 243, 166, 0.86);
+  background: rgba(255, 243, 166, 0.08);
+  pointer-events: none;
+}
+
+.usa-shot-zone span {
+  margin-bottom: 10px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 243, 166, 0.92);
+  color: #8c6a00;
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.usa-obstacle {
+  position: absolute;
+  z-index: 4;
+  left: var(--obstacle-x);
+  top: var(--obstacle-y);
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(255, 214, 102, 0.94);
+  color: #c95f28;
+  font-size: 29px;
+  font-weight: 950;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 8px 16px rgba(40, 55, 68, 0.18);
+  pointer-events: none;
+}
+
+.usa-hoop {
+  position: absolute;
+  z-index: 5;
+  left: 82%;
+  top: 50%;
+  width: 72px;
+  height: 100px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.usa-hoop-ring {
+  position: absolute;
+  left: 8px;
+  top: 16px;
+  width: 58px;
+  height: 22px;
+  border: 6px solid #ff8c42;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.usa-hoop-net {
+  position: absolute;
+  left: 22px;
+  top: 36px;
+  width: 30px;
+  height: 52px;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  border-top: 0;
+  border-radius: 0 0 14px 14px;
+  background: repeating-linear-gradient(90deg, transparent 0 8px, rgba(255, 255, 255, 0.7) 8px 11px);
+}
+
+.usa-school-bus {
+  position: absolute;
+  z-index: 7;
+  left: var(--bus-x);
+  top: var(--bus-y);
+  width: 128px;
+  height: 70px;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 12px 12px rgba(22, 43, 54, 0.2));
+  transition: top 0.12s ease-out;
+  pointer-events: none;
+}
+
+.usa-bus-top {
+  position: absolute;
+  left: 28px;
+  top: 3px;
+  width: 72px;
+  height: 24px;
+  border-radius: 16px 16px 6px 6px;
+  background: #ffd54a;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+}
+
+.usa-bus-body {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 22px;
+  height: 38px;
+  border-radius: 14px 18px 12px 12px;
+  background: #ffc857;
+  border: 3px solid rgba(255, 255, 255, 0.76);
+  box-shadow: inset -12px 0 0 rgba(238, 143, 44, 0.2);
+}
+
+.usa-bus-window {
+  position: relative;
+  top: 7px;
+  left: 12px;
+  display: inline-block;
+  width: 19px;
+  height: 13px;
+  margin-right: 6px;
+  border-radius: 5px;
+  background: #dff7ff;
+}
+
+.usa-bus-light {
+  position: absolute;
+  right: 6px;
+  top: 19px;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #fff5d1;
+}
+
+.usa-bus-wheel {
+  position: absolute;
+  bottom: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 999px;
+  background: radial-gradient(circle, #fff5d1 0 32%, #245267 34% 100%);
+}
+
+.usa-bus-wheel.front {
+  right: 18px;
+}
+
+.usa-bus-wheel.back {
+  left: 18px;
+}
+
+.usa-basketball-shot {
+  position: absolute;
+  z-index: 9;
+  left: var(--shot-start-x);
+  top: var(--shot-start-y);
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: 28px;
+  transform: translate(-50%, -50%);
+  animation: usa-shot-arc 0.76s cubic-bezier(0.16, 0.84, 0.34, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes usa-shot-arc {
+  0% {
+    transform: translate(-50%, -50%) scale(0.92) rotate(0deg);
+  }
+  48% {
+    transform: translate(calc(var(--shot-dx) * 0.5 - 50%), calc(var(--shot-dy) * 0.45 - 20vh - 50%)) scale(1.1) rotate(220deg);
+  }
+  100% {
+    transform: translate(calc(var(--shot-dx) - 50%), calc(var(--shot-dy) - 50%)) scale(0.9) rotate(520deg);
+  }
+}
+
+.usa-feedback-card {
+  position: absolute;
+  z-index: 12;
+  left: max(18px, env(safe-area-inset-left));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  width: min(430px, calc(100vw - 36px));
+  min-height: 82px;
+  display: grid;
+  gap: 6px;
+  align-content: center;
+  border-radius: 24px;
+  padding: 14px 18px;
+  color: #21495a;
+  pointer-events: none;
+}
+
+.usa-feedback-card.success {
+  background: rgba(213, 250, 226, 0.94);
+  color: #047a65;
+}
+
+.usa-feedback-card.retry {
+  background: rgba(255, 243, 166, 0.94);
+  color: #8c6a00;
+}
+
+.usa-feedback-status {
+  font-size: clamp(0.95rem, 1.9vw, 1.16rem);
+  line-height: 1.3;
+  font-weight: 950;
+}
+
+.usa-feedback-physics {
+  color: #617985;
+  font-size: clamp(0.78rem, 1.45vw, 0.92rem);
+  font-weight: 850;
+}
+
+.usa-action-bar {
+  position: absolute;
+  z-index: 12;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.usa-action-bar button {
+  min-height: 60px;
+  min-width: 116px;
+  border-radius: 24px;
+  color: #21495a;
+  font-size: 1.06rem;
+  font-weight: 950;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.usa-shoot-button {
+  background: rgba(255, 243, 166, 0.96) !important;
+  color: #8c6a00 !important;
+}
+
+.usa-reset-button {
+  background: rgba(213, 250, 226, 0.94) !important;
+  color: #047a65 !important;
+}
+
+.usa-action-bar button:disabled {
+  opacity: 0.58;
+  cursor: default;
+}
+
+@media (max-width: 720px) {
+  .usa-game-hud {
+    grid-template-columns: auto;
+  }
+
+  .usa-title-card {
+    justify-self: start;
+    max-width: calc(100vw - 28px);
+    min-height: 58px;
+    padding: 9px 16px;
+    text-align: left;
+  }
+
+  .usa-title-card strong {
+    display: none;
+  }
+
+  .usa-scoreboard {
+    top: max(14px, env(safe-area-inset-top));
+    right: max(14px, env(safe-area-inset-right));
+  }
+
+  .usa-road-stage {
+    padding: 150px 14px 150px;
+  }
+
+  .usa-road {
+    width: calc(100vw - 28px);
+    height: 54vh;
+    min-height: 330px;
+    border-radius: 26px;
+  }
+
+  .usa-school-bus {
+    width: 104px;
+    height: 62px;
+  }
+
+  .usa-obstacle {
+    width: 46px;
+    height: 46px;
+    font-size: 24px;
+  }
+
+  .usa-feedback-card {
+    left: 14px;
+    bottom: max(86px, calc(env(safe-area-inset-bottom) + 82px));
+    width: calc(100vw - 28px);
+    min-height: 66px;
+    border-radius: 22px;
+  }
+
+  .usa-action-bar {
+    left: 14px;
+    right: 14px;
+    bottom: max(14px, env(safe-area-inset-bottom));
+  }
+
+  .usa-action-bar button {
+    flex: 1;
+    min-width: 0;
+    min-height: 56px;
+  }
+}

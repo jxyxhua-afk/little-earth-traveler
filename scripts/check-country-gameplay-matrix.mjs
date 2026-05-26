@@ -57,6 +57,30 @@ for (const archetype of Object.values(LOCOMOTION_ARCHETYPES)) {
   }
 }
 
+const usa = COUNTRY_GAMEPLAY_MATRIX.find((country) => country.countryId === "usa");
+const china = COUNTRY_GAMEPLAY_MATRIX.find((country) => country.countryId === "china");
+const egypt = COUNTRY_GAMEPLAY_MATRIX.find((country) => country.countryId === "egypt");
+
+if (!usa) {
+  errors.push("usa: country gameplay config is required");
+} else {
+  if (!Array.isArray(usa.keyObjects) || usa.keyObjects.length === 0) {
+    errors.push("usa: keyObjects is required");
+  }
+
+  if (!Array.isArray(usa.forbiddenSimilarities) || usa.forbiddenSimilarities.length === 0) {
+    errors.push("usa: forbiddenSimilarities is required");
+  }
+
+  if (china && usa.coreVerb === china.coreVerb) {
+    errors.push("usa: coreVerb must differ from china");
+  }
+
+  if (egypt && usa.coreVerb === egypt.coreVerb) {
+    errors.push("usa: coreVerb must differ from egypt");
+  }
+}
+
 if (errors.length > 0) {
   console.error("Country gameplay matrix validation failed:");
   for (const error of errors) {
