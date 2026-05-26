@@ -45,7 +45,7 @@ export function GlobeScreen({ countries, totalStars, totalStarsTotal, onEnterCou
       sceneId: selectedCountryInfo.sceneId
     });
 
-    if (selectedCountryInfo.id === "china") {
+    if (selectedCountryInfo.id === "china" || selectedCountryInfo.id === "egypt") {
       onEnterCountry?.(selectedCountryInfo.id);
     }
   };
